@@ -1,12 +1,13 @@
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class RedactorTest {
     @ParameterizedTest
-    @CsvSource({"The quick brown fox, {brown}"})
-    void redact() {
+    @ValueSource(strings = {"the","quick","brown","Fox","apostrophe'","hyphen-"})
+    void redact_ShouldReturnTrue(String redactWords) {
+        String[] words = new String[1];
+        words[0] = redactWords;
+        Assertions.assertEquals("true", Redactor.redact("The quick brown fox", words));
     }
 }

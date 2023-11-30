@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class Redactor {
     /*
     *
@@ -27,12 +29,17 @@ Capitalization of unredacted words in the input text should be maintained in the
 
     public static String redact(String content, String[] redactWords) {
         //Do a check for - and ' in the redactWords array
+        System.out.println("content: " + content);
+        System.out.println("redactWords: " + Arrays.toString(redactWords));
         if (!content.matches("[-']*")) {
             //String redactedString = content;
+            System.out.println("content contains no - or '");
             for (String word : redactWords) {
                 //Use regex and String.matches() method
                 if (content.matches(("(?i)^" + word + "$|(?i) *" + word + " *"))) {
                     return "true";
+                } else {
+                    System.out.println("No match from regex");
                 }
             }
         }
