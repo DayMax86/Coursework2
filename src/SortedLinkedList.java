@@ -5,13 +5,13 @@ import java.text.NumberFormat;
 class Testing {
     public static void main(String[] args) {
         SortedLinkedList L = new SortedLinkedList();
-        L.add(new Node("alpha"));
         L.add(new Node("bravo"));
-        L.add(new Node("delta"));
         L.add(new Node("charlie"));
         L.add(new Node("echo"));
+        L.add(new Node("delta"));
         L.add(new Node("x-ray"));
         L.add(new Node("golf"));
+        L.add(new Node("alpha"));
         L.add(new Node("foxtrot"));
         L.add(new Node("zulu"));
         L.add(new Node("hotel"));
@@ -53,11 +53,20 @@ public class SortedLinkedList implements SortedList {
             //There is no first item so new node becomes the first
             System.out.println("No first node so new node (" + node.getString() + ") = first");
             first = node;
+            last = node;
         } else {
             //Not the first node
             Node currentNode = first;
 
             //Check for duplicates using isPresent()
+            if (node.getString().compareToIgnoreCase(currentNode.getString()) < 1) {
+                System.out.println(node.getString() + " < current first element (" + first.getString() + ")");
+                //Must precede the current first element
+                currentNode.setPrev(node);
+                node.setNext(currentNode);
+                first = node;
+                return;
+            }
 
             for (int i = 0; i < this.size(); i++) {
                 try {
@@ -78,59 +87,22 @@ public class SortedLinkedList implements SortedList {
                     System.out.println(node.getString() + " added to end of list");
                     currentNode.setNext(node);
                     node.setPrev(currentNode);
+                    last = node;
                     return;
                 }
             }
-/*
-            while (this.size() >= 1) {
-                //Is it greater than value of next node?
-                if (currentNode.getNext() != null) {
-                    if (node.getString().compareToIgnoreCase(currentNode.getNext().getString()) == 1) {
-                        //CompareTo returns 1 if node string alphabetically succeeds next-node string
-                        System.out.println("Node string > next");
-                        try {
-                            currentNode = currentNode.getNext();
-                        } catch (NullPointerException e) {
-                            System.out.println("No next node (end of list) | " + e);
-                            last = node;
-                        }
-                    } else if (node.getString().compareToIgnoreCase(currentNode.getNext().getString()) == 0) {
-                        //CompareTo returns 0 if the strings are identical
-                        System.out.println("Duplicate node, list remains unchanged");
-                        //return;
-                    } else {
-                        //CompareTo returns -1 if node string alphabetically precedes next-node string
-                        System.out.println("Node string < next, therefore being added");
-                        currentNode.setNext(node);
-                        currentNode.getNext().setPrev(node);
-                        node.setPrev(currentNode);
-                        node.setNext(currentNode.getNext());
-                        try {
-                            currentNode = currentNode.getNext();
-                        } catch (NullPointerException e) {
-                            System.out.println("No next node (end of list) | " + e);
-                            last = node;
-                        }
-                        //return;
-                    }
-                } else {
-                    System.out.println(node.getString() + " added to end of list");
-                    currentNode.setNext(node);
-                    node.setPrev(currentNode);
-                    last = node;
-                }
-            }*/
+
         }
     }
 
     @Override
     public Node getFirst() {
-        return null;
+        return first;
     }
 
     @Override
     public Node getLast() {
-        return null;
+        return last;
     }
 
     @Override
