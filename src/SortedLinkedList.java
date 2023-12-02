@@ -1,28 +1,213 @@
-public class SortedLinkedList {
+import java.text.NumberFormat;
 
+
+//----------- For testing ------------
+class Testing {
     public static void main(String[] args) {
+        SortedLinkedList L = new SortedLinkedList();
+        L.add(new Node("alpha"));
+        L.add(new Node("bravo"));
+        L.add(new Node("delta"));
+        L.add(new Node("charlie"));
+        L.add(new Node("echo"));
+        L.add(new Node("x-ray"));
+        L.add(new Node("golf"));
+        L.add(new Node("foxtrot"));
+        L.add(new Node("zulu"));
+        L.add(new Node("hotel"));
+        L.print();
+    }
+}
+
+//------------------------------------
+
+
+public class SortedLinkedList implements SortedList {
+
+    Node first = new Node(null, "", null);
+    Node last = new Node(null, "", null);
+
+    @Override
+    public int size() {
+        int i = 0;
+        Node currentNode = first;
+        try {
+            while (!currentNode.getString().isEmpty()) {
+                i++;
+                currentNode = currentNode.getNext();
+            }
+        } catch (NullPointerException e) {
+            //System.out.println("End of list reached | " + i);
+        }
+        return i;
+    }
+
+    @Override
+    public void add(String string) {
 
     }
 
+    @Override
+    public void add(Node node) {
+        if (this.size() == 0) {
+            //There is no first item so new node becomes the first
+            System.out.println("No first node so new node (" + node.getString() + ") = first");
+            first = node;
+        } else {
+            //Not the first node
+            Node currentNode = first;
+
+            //Check for duplicates using isPresent()
+
+            for (int i = 0; i < this.size(); i++) {
+                try {
+                    if (node.getString().compareToIgnoreCase(currentNode.getNext().getString()) >= 1) {
+                        //CompareTo returns a positive integer if node string alphabetically succeeds next-node string
+                        currentNode = currentNode.getNext();
+                    } else {
+                        //Must be lesser alphabetically so insert here
+                        System.out.println(node.getString() + " < " + currentNode.getNext().getString() + ", therefore " + node.getString() + " being added");
+                        node.setNext(currentNode.getNext());
+                        node.setPrev(currentNode);
+                        currentNode.setNext(node);
+                        node.getNext().setPrev(node);
+                        return;
+                    }
+                } catch (NullPointerException e) {
+                    //Must be at the end of the list
+                    System.out.println(node.getString() + " added to end of list");
+                    currentNode.setNext(node);
+                    node.setPrev(currentNode);
+                    return;
+                }
+            }
+/*
+            while (this.size() >= 1) {
+                //Is it greater than value of next node?
+                if (currentNode.getNext() != null) {
+                    if (node.getString().compareToIgnoreCase(currentNode.getNext().getString()) == 1) {
+                        //CompareTo returns 1 if node string alphabetically succeeds next-node string
+                        System.out.println("Node string > next");
+                        try {
+                            currentNode = currentNode.getNext();
+                        } catch (NullPointerException e) {
+                            System.out.println("No next node (end of list) | " + e);
+                            last = node;
+                        }
+                    } else if (node.getString().compareToIgnoreCase(currentNode.getNext().getString()) == 0) {
+                        //CompareTo returns 0 if the strings are identical
+                        System.out.println("Duplicate node, list remains unchanged");
+                        //return;
+                    } else {
+                        //CompareTo returns -1 if node string alphabetically precedes next-node string
+                        System.out.println("Node string < next, therefore being added");
+                        currentNode.setNext(node);
+                        currentNode.getNext().setPrev(node);
+                        node.setPrev(currentNode);
+                        node.setNext(currentNode.getNext());
+                        try {
+                            currentNode = currentNode.getNext();
+                        } catch (NullPointerException e) {
+                            System.out.println("No next node (end of list) | " + e);
+                            last = node;
+                        }
+                        //return;
+                    }
+                } else {
+                    System.out.println(node.getString() + " added to end of list");
+                    currentNode.setNext(node);
+                    node.setPrev(currentNode);
+                    last = node;
+                }
+            }*/
+        }
+    }
+
+    @Override
+    public Node getFirst() {
+        return null;
+    }
+
+    @Override
+    public Node getLast() {
+        return null;
+    }
+
+    @Override
+    public Node get(int index) {
+        return null;
+    }
+
+    @Override
+    public boolean isPresent
+            (String string) {
+        return false;
+    }
+
+    @Override
+    public boolean removeFirst() {
+        return false;
+    }
+
+    @Override
+    public boolean removeLast() {
+        return false;
+    }
+
+    @Override
+    public boolean remove(int index) {
+        return false;
+    }
+
+    @Override
+    public boolean remove(String string) {
+        return false;
+    }
+
+    @Override
+    public void orderAscending() {
+
+    }
+
+    @Override
+    public void orderDescending() {
+
+    }
+
+    @Override
+    public void print() {
+        System.out.println("Print method called!");
+        Node currentNode = first;
+        if (this.size() == 0) {
+            System.out.println("List is empty!");
+        } else {
+            for (int i = 0; i < this.size(); i++) {
+                try {
+                    System.out.println("String: " + currentNode.getString());
+                    currentNode = currentNode.getNext();
+                } catch (NullPointerException e) {
+                    System.out.println("End of list so stopped printing");
+                }
+            }
+        }
+    }
 }
-
-
 
 
 /**
  * SortedList interface for use with the CM10228: Principles of Programming 2 coursework.
- *
+ * <p>
  * This should not be modified by the student.
  *
- * @author		Christopher Clarke
- * @version		1.0
+ * @author Christopher Clarke
+ * @version 1.0
  */
 interface SortedList {
 
     /**
      * Returns the number of Nodes in the linked list.
      *
-     * @return      the number of Nodes in the linked list
+     * @return the number of Nodes in the linked list
      */
     public int size();
 
@@ -31,7 +216,7 @@ interface SortedList {
      * the appropriate position given the specified alphabetical order
      * (i.e., ascending/descending).
      *
-     * @param  string  a String to be added to the linked list
+     * @param string a String to be added to the linked list
      */
     public void add(String string);
 
@@ -39,7 +224,7 @@ interface SortedList {
      * Adds a Node to the linked list in the appropriate position
      * given the specified alphabetical order (i.e., ascending/descending).
      *
-     * @param  node  a Node to be added to the linked list
+     * @param node a Node to be added to the linked list
      */
     public void add(Node node);
 
@@ -47,7 +232,7 @@ interface SortedList {
      * Returns the first Node of the linked list given the specified
      * alphabetical order (i.e., ascending/descending).
      *
-     * @return      the first Node in the linked list
+     * @return the first Node in the linked list
      */
     public Node getFirst();
 
@@ -55,7 +240,7 @@ interface SortedList {
      * Returns the last Node of the linked list given the specified
      * alphabetical order (i.e., ascending/descending).
      *
-     * @return      the last Node in the linked list
+     * @return the last Node in the linked list
      */
     public Node getLast();
 
@@ -64,8 +249,8 @@ interface SortedList {
      * at 0 and end with size-1 given the specified alphabetical order
      * (i.e., ascending/descending).
      *
-     * @param  index  the index of the Node in the linked list to be retrieved
-     * @return      the Node in the linked list at the specified index
+     * @param index the index of the Node in the linked list to be retrieved
+     * @return the Node in the linked list at the specified index
      */
     public Node get(int index);
 
@@ -73,8 +258,8 @@ interface SortedList {
      * Checks to see if the list contains a Node with the specified
      * string.
      *
-     * @param  string  the String to be searched for in the linked list
-     * @return       True if the string is present or false if not
+     * @param string the String to be searched for in the linked list
+     * @return True if the string is present or false if not
      */
     public boolean isPresent(String string);
 
@@ -82,7 +267,7 @@ interface SortedList {
      * Removes the first Node from the list given the specified
      * alphabetical order (i.e., ascending/descending).
      *
-     * @return      Returns true if successful or false if unsuccessful
+     * @return Returns true if successful or false if unsuccessful
      */
     public boolean removeFirst();
 
@@ -90,7 +275,7 @@ interface SortedList {
      * Removes the last Node from the list given the specified
      * alphabetical order (i.e., ascending/descending).
      *
-     * @return      Returns true if successful or false if unsuccessful
+     * @return Returns true if successful or false if unsuccessful
      */
     public boolean removeLast();
 
@@ -99,28 +284,26 @@ interface SortedList {
      * start at 0 and end with size-1 given the specified alphabetical order
      * (i.e., ascending/descending)
      *
-     * @param  index  the index of the Node in the linked list to be removed
-     * @return      Returns true if successful or false if unsuccessful
+     * @param index the index of the Node in the linked list to be removed
+     * @return Returns true if successful or false if unsuccessful
      */
     public boolean remove(int index);
 
     /**
      * Removes the Node from the list that contains the specified string.
      *
-     * @param  string  the string to be removed from the linked list
-     * @return      Returns true if successful or false if unsuccessful
+     * @param string the string to be removed from the linked list
+     * @return Returns true if successful or false if unsuccessful
      */
     public boolean remove(String string);
 
     /**
      * Orders the linked list in ascending alphabetical order.
-     *
      */
     public void orderAscending();
 
     /**
      * Orders the linked list in descending alphabetical order.
-     *
      */
     public void orderDescending();
 
@@ -128,7 +311,6 @@ interface SortedList {
      * Prints the contents of the linked list in the specified alphabetical order
      * (i.e., ascending/descending) to System.out with each node's string on
      * a new line.
-     *
      */
     public void print();
 }
@@ -136,11 +318,11 @@ interface SortedList {
 
 /**
  * Node class for use with the CM10228: Principles of Programming 2 coursework.
- *
+ * <p>
  * This should not be modified by the student.
  *
- * @author		Christopher Clarke
- * @version		1.0
+ * @author Christopher Clarke
+ * @version 1.0
  */
 class Node {
     private String name;
