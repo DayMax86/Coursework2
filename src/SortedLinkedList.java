@@ -1,10 +1,10 @@
-import java.text.NumberFormat;
-
 
 //----------- For testing ------------
 class Testing {
     public static void main(String[] args) {
+        /*
         SortedLinkedList L = new SortedLinkedList();
+        L.order = SortedLinkedList.OrderStatus.ASCENDING;
         L.add(new Node("bravo"));
         L.add(new Node("charlie"));
         L.add(new Node("echo"));
@@ -16,6 +16,22 @@ class Testing {
         L.add(new Node("zulu"));
         L.add(new Node("hotel"));
         L.print();
+        */
+
+        SortedLinkedList Lr = new SortedLinkedList();
+        Lr.order = SortedLinkedList.OrderStatus.DESCENDING;
+        Lr.add(new Node("bravo"));
+        Lr.add(new Node("charlie"));
+        Lr.add(new Node("echo"));
+        Lr.add(new Node("delta"));
+        Lr.add(new Node("x-ray"));
+        Lr.add(new Node("golf"));
+        Lr.add(new Node("alpha"));
+        Lr.add(new Node("foxtrot"));
+        Lr.add(new Node("zulu"));
+        Lr.add(new Node("hotel"));
+        Lr.print();
+
     }
 }
 
@@ -26,6 +42,12 @@ public class SortedLinkedList implements SortedList {
 
     Node first = new Node(null, "", null);
     Node last = new Node(null, "", null);
+    OrderStatus order = OrderStatus.ASCENDING;
+
+    enum OrderStatus {
+        ASCENDING,
+        DESCENDING
+    }
 
     @Override
     public int size() {
@@ -49,46 +71,76 @@ public class SortedLinkedList implements SortedList {
 
     @Override
     public void add(Node node) {
+        Node currentNode = first;
         if (this.size() == 0) {
-            //There is no first item so new node becomes the first
-            System.out.println("No first node so new node (" + node.getString() + ") = first");
+            //There is no first item so new node becomes the first (for both ascending and descending)
+            //System.out.println("No first node so new node (" + node.getString() + ") = first");
             first = node;
             last = node;
         } else {
             //Not the first node
-            Node currentNode = first;
+            switch (order) {
+                case OrderStatus.ASCENDING:
+                    currentNode = first;
+                    break;
+                case OrderStatus.DESCENDING:
+                    currentNode = last;
+                    break;
+            }
 
             //Check for duplicates using isPresent()
-            if (node.getString().compareToIgnoreCase(currentNode.getString()) < 1) {
-                System.out.println(node.getString() + " < current first element (" + first.getString() + ")");
-                //Must precede the current first element
+
+            //Does it precede the current first element?
+            if (node.getString().compareToIgnoreCase(currentNode.getString()) < 1 && order == OrderStatus.ASCENDING) {
                 currentNode.setPrev(node);
                 node.setNext(currentNode);
                 first = node;
+                return;
+            } else if (node.getString().compareToIgnoreCase(currentNode.getString()) > 1 && order == OrderStatus.DESCENDING) {
+                currentNode.setNext(node);
+                node.setPrev(currentNode);
+                last = node;
                 return;
             }
 
             for (int i = 0; i < this.size(); i++) {
                 try {
-                    if (node.getString().compareToIgnoreCase(currentNode.getNext().getString()) >= 1) {
+                    if (node.getString().compareToIgnoreCase(currentNode.getNext().getString()) >= 1 && order == OrderStatus.ASCENDING) {
                         //CompareTo returns a positive integer if node string alphabetically succeeds next-node string
                         currentNode = currentNode.getNext();
-                    } else {
+                    } else if (node.getString().compareToIgnoreCase(currentNode.getNext().getString()) <= 1 && order == OrderStatus.DESCENDING) {
+                        currentNode = currentNode.getPrev();
+                    } else if (node.getString().compareToIgnoreCase(currentNode.getNext().getString()) < 1 && order == OrderStatus.ASCENDING) {
                         //Must be lesser alphabetically so insert here
-                        System.out.println(node.getString() + " < " + currentNode.getNext().getString() + ", therefore " + node.getString() + " being added");
                         node.setNext(currentNode.getNext());
                         node.setPrev(currentNode);
                         currentNode.setNext(node);
                         node.getNext().setPrev(node);
                         return;
+                    } else if (node.getString().compareToIgnoreCase(currentNode.getNext().getString()) > 1 && order == OrderStatus.DESCENDING) {
+                        //Must be greater alphabetically so insert here
+                        node.setPrev(currentNode.getPrev());
+                        node.setNext(currentNode);
+                        currentNode.setPrev(node);
+                        node.getPrev().setNext(node);
+                        return;
                     }
                 } catch (NullPointerException e) {
                     //Must be at the end of the list
-                    System.out.println(node.getString() + " added to end of list");
-                    currentNode.setNext(node);
-                    node.setPrev(currentNode);
-                    last = node;
-                    return;
+                    switch (order) {
+                        case OrderStatus.ASCENDING:
+                            currentNode.setNext(node);
+                            node.setPrev(currentNode);
+                            last = node;
+                            return;
+
+                        case OrderStatus.DESCENDING:
+                            currentNode.setPrev(node);
+                            node.setNext(currentNode);
+                            first = node;
+                            return;
+                    }
+
                 }
             }
 
@@ -107,12 +159,42 @@ public class SortedLinkedList implements SortedList {
 
     @Override
     public Node get(int index) {
-        return null;
+        //Check for index out of range exception
+        if (index > this.size()) {
+            return null;
+        } else {
+            Node currentNode = first;
+            if (this.size() == 0) {
+                System.out.println("List is empty!");
+                return null;
+            } else {
+                for (int i = 0; i < this.size(); i++) {
+                    try {
+                        if (i == index) {
+                            return currentNode;
+                        } else {
+                            currentNode = currentNode.getNext();
+                        }
+                    } catch (NullPointerException e) {
+                        System.out.println("End of list");
+                        return null;
+                    }
+                }
+            }
+            return null;
+        }
     }
 
     @Override
-    public boolean isPresent
-            (String string) {
+    public boolean isPresent(String string) {
+        Node currentNode = first;
+        for (int i = 0; i < this.size(); i++) {
+            if (currentNode.getString().equals(string)) {
+                return true;
+            } else {
+                currentNode = currentNode.getNext();
+            }
+        }
         return false;
     }
 
@@ -148,7 +230,6 @@ public class SortedLinkedList implements SortedList {
 
     @Override
     public void print() {
-        System.out.println("Print method called!");
         Node currentNode = first;
         if (this.size() == 0) {
             System.out.println("List is empty!");
