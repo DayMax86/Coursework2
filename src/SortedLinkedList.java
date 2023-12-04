@@ -9,27 +9,32 @@ class Testing {
         L.add(new Node("echo"));
         L.add(new Node("delta"));
         L.add(new Node("x-ray"));
+        L.add("charlie");
         L.add(new Node("golf"));
         L.add(new Node("alpha"));
         L.add(new Node("foxtrot"));
         L.add(new Node("zulu"));
         L.add(new Node("hotel"));
+        L.add("Max");
         L.print();
+
         System.out.println("-----------------------------------");
+
         SortedLinkedList Lr = new SortedLinkedList();
         Lr.order = SortedLinkedList.OrderStatus.DESCENDING;
         Lr.add(new Node("bravo"));
         Lr.add(new Node("charlie"));
+        Lr.add("Max");
         Lr.add(new Node("echo"));
         Lr.add(new Node("delta"));
         Lr.add(new Node("x-ray"));
         Lr.add(new Node("golf"));
         Lr.add(new Node("alpha"));
+        Lr.add("echo");
         Lr.add(new Node("foxtrot"));
         Lr.add(new Node("zulu"));
         Lr.add(new Node("hotel"));
         Lr.print();
-
     }
 }
 
@@ -64,18 +69,22 @@ public class SortedLinkedList implements SortedList {
 
     @Override
     public void add(String string) {
-
+        this.add(new Node(string));
     }
 
     @Override
     public void add(Node node) {
         Node currentNode;
 
-        //Check for duplicates using isPresent()!!
+        //Check for duplicates
+        if (this.isPresent(node.getString())) {
+            System.out.println("A node with string '" + node.getString() + "' already exists - nothing added");
+            return;
+        }
 
         if (this.size() == 0) {
             //There is no first item so new node becomes the first (for both ascending and descending)
-            System.out.println("No first node so new node (" + node.getString() + ") = first and last");
+//            System.out.println("No first node so new node (" + node.getString() + ") = first and last");
             first = node;
             last = node;
         } else {
@@ -119,7 +128,7 @@ public class SortedLinkedList implements SortedList {
                     currentNode = last;
 
                     if (node.getString().compareToIgnoreCase(currentNode.getString()) < 1) {
-                        System.out.println(node.getString() + " is after " + currentNode.getString() + " (last) so added to end");
+//                        System.out.println(node.getString() + " is after " + currentNode.getString() + " (last) so added to end");
                         currentNode.setNext(node);
                         node.setPrev(currentNode);
                         last = node;
@@ -129,10 +138,10 @@ public class SortedLinkedList implements SortedList {
                     for (int i = 0; i < this.size(); i++) {
                         try {
                             if (node.getString().compareToIgnoreCase(currentNode.getPrev().getString()) >= 1) {
-                                System.out.println(node.getString() + " is after " + currentNode.getPrev().getString() + " so carry on");
+//                                System.out.println(node.getString() + " is after " + currentNode.getPrev().getString() + " so carry on");
                                 currentNode = currentNode.getPrev();
                             } else if (node.getString().compareToIgnoreCase(currentNode.getPrev().getString()) < 1) {
-                                System.out.println(node.getString() + " is before " + currentNode.getPrev().getString() + " so inserted here");
+//                                System.out.println(node.getString() + " is before " + currentNode.getPrev().getString() + " so inserted here");
                                 currentNode.getPrev().setNext(node);
                                 node.setPrev(currentNode.getPrev());
                                 node.setNext(currentNode);
@@ -140,7 +149,7 @@ public class SortedLinkedList implements SortedList {
                                 return;
                             }
                         } catch (NullPointerException e) {
-                            System.out.println("reached end of list, " + node.getString() + " added to start");
+//                            System.out.println("reached end of list, " + node.getString() + " added to start");
                             currentNode.setPrev(node);
                             node.setNext(currentNode);
                             first = node;
