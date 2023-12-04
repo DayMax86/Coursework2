@@ -35,6 +35,9 @@ class Testing {
         Lr.add(new Node("zulu"));
         Lr.add(new Node("hotel"));
         Lr.print();
+        System.out.println("----------SORTING BELOW----------------");
+        Lr.orderAscending();
+        Lr.print();
     }
 }
 
@@ -175,14 +178,14 @@ public class SortedLinkedList implements SortedList {
     @Override
     public Node get(int index) {
         //Check for index out of range exception
-        if (index > this.size()) {
+        if (index >= this.size()) {
             return null;
         } else {
-            Node currentNode = first;
             if (this.size() == 0) {
                 System.out.println("List is empty!");
                 return null;
             } else {
+                Node currentNode = first;
                 for (int i = 0; i < this.size(); i++) {
                     try {
                         if (i == index) {
@@ -306,9 +309,70 @@ public class SortedLinkedList implements SortedList {
         return false;
     }
 
+    public void removeAll(int size) {
+        for (int i = 0; i < size; i++) {
+            if (this.size() == 1) {
+                this.removeFirst();
+            } else {
+                this.removeLast();
+            }
+        }
+    }
+
+    public boolean bubble(Node node1, Node node2) {
+        //If they are already in order, leave them and move on to the next pair
+        if (node1.getString().compareToIgnoreCase(node2.getString()) > 0) {
+            //Must be in the wrong order - swap!
+            System.out.println("Swapping " + node1.getString() + " and " + node2.getString());
+            if (node1 == first) {
+                //At the start of the list
+                node2.getNext().setPrev(node1);
+                node1.setNext(node2.getNext());
+                node1.setPrev(node2);
+                node2.setNext(node1);
+                first = node2;
+                return true;
+            } else if (node2 == last) {
+                //At the end of the list
+                node1.getPrev().setNext(node2);
+                node1.setPrev(node2);
+                node2.setNext(node1);
+                node2.setPrev(node1.getPrev());
+                last = node1;
+                return true;
+            } else {
+                //In the middle somewhere
+                node1.getPrev().setNext(node2);
+                node2.getNext().setPrev(node1);
+                node1.setNext(node2.getNext());
+                node1.setPrev(node2);
+                node2.setNext(node1);
+                node2.setPrev(node1.getPrev());
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void orderAscending() {
-
+        //Bubble sort the list
+        int size = this.size();
+        boolean noSwaps = true;
+        Node node1;
+        Node node2;
+        do  {
+            for (int i = 0; i < size; i++) {
+                node1 = this.get(i);
+                node2 = this.get(i + 1);
+                if (bubble(node1, node2)) {
+                    //A swap has been done
+                    noSwaps = false;
+                }
+                System.out.println("i = " + i);
+                System.out.println("noSwaps = " + noSwaps);
+            }
+        } while (!noSwaps);
     }
 
     @Override

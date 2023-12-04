@@ -111,6 +111,44 @@ public class SortedLinkedListTest {
         assertEquals(8, L.size());
     }
 
+    @Test
+    @DisplayName("Clear entire list")
+    void removeAll() {
+        L.removeAll(L.size());
+        assertEquals(0, L.size());
+    }
+
+    @Test
+    @DisplayName("Order list (ascending)")
+    void orderAscending() {
+
+        SortedLinkedList lAsc = new SortedLinkedList();
+        lAsc.order = SortedLinkedList.OrderStatus.ASCENDING;
+        lAsc.add("apple");
+        lAsc.add("banana");
+        lAsc.add("lychee");
+        lAsc.add("cherry");
+        lAsc.add("blackcurrant");
+        lAsc.add("persimmon");
+        lAsc.add("yam");
+        lAsc.print();
+
+        SortedLinkedList L2 = new SortedLinkedList();
+        L2.order = SortedLinkedList.OrderStatus.DESCENDING;
+        L2.add("apple");
+        L2.add("banana");
+        L2.add("lychee");
+        L2.add("cherry");
+        L2.add("blackcurrant");
+        L2.add("persimmon");
+        L2.add("yam");
+        L2.orderAscending();
+        L2.print();
+
+        assertEquals(lAsc.get(0).getString(), L2.get(0).getString());
+    }
+
+
     /*
     @Test
     @DisplayName("Add to reverse list") {
