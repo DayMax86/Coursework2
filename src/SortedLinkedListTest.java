@@ -7,9 +7,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class SortedLinkedListTest {
     SortedLinkedList L = new SortedLinkedList();
+    SortedLinkedList.OrderStatus O = SortedLinkedList.OrderStatus.ASCENDING;
 
     @BeforeEach
     void beforeEach() {
+        O = SortedLinkedList.OrderStatus.ASCENDING;
         L.add(new Node("bravo"));
         L.add(new Node("charlie"));
         L.add(new Node("echo"));

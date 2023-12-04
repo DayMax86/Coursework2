@@ -2,7 +2,6 @@
 //----------- For testing ------------
 class Testing {
     public static void main(String[] args) {
-        /*
         SortedLinkedList L = new SortedLinkedList();
         L.order = SortedLinkedList.OrderStatus.ASCENDING;
         L.add(new Node("bravo"));
@@ -16,8 +15,7 @@ class Testing {
         L.add(new Node("zulu"));
         L.add(new Node("hotel"));
         L.print();
-        */
-
+        System.out.println("-----------------------------------");
         SortedLinkedList Lr = new SortedLinkedList();
         Lr.order = SortedLinkedList.OrderStatus.DESCENDING;
         Lr.add(new Node("bravo"));
@@ -71,10 +69,13 @@ public class SortedLinkedList implements SortedList {
 
     @Override
     public void add(Node node) {
-        Node currentNode = first;
+        Node currentNode;
+
+        //Check for duplicates using isPresent()!!
+
         if (this.size() == 0) {
             //There is no first item so new node becomes the first (for both ascending and descending)
-            //System.out.println("No first node so new node (" + node.getString() + ") = first");
+            System.out.println("No first node so new node (" + node.getString() + ") = first and last");
             first = node;
             last = node;
         } else {
@@ -82,66 +83,71 @@ public class SortedLinkedList implements SortedList {
             switch (order) {
                 case OrderStatus.ASCENDING:
                     currentNode = first;
-                    break;
-                case OrderStatus.DESCENDING:
-                    currentNode = last;
-                    break;
-            }
 
-            //Check for duplicates using isPresent()
-
-            //Does it precede the current first element?
-            if (node.getString().compareToIgnoreCase(currentNode.getString()) < 1 && order == OrderStatus.ASCENDING) {
-                currentNode.setPrev(node);
-                node.setNext(currentNode);
-                first = node;
-                return;
-            } else if (node.getString().compareToIgnoreCase(currentNode.getString()) > 1 && order == OrderStatus.DESCENDING) {
-                currentNode.setNext(node);
-                node.setPrev(currentNode);
-                last = node;
-                return;
-            }
-
-            for (int i = 0; i < this.size(); i++) {
-                try {
-                    if (node.getString().compareToIgnoreCase(currentNode.getNext().getString()) >= 1 && order == OrderStatus.ASCENDING) {
-                        //CompareTo returns a positive integer if node string alphabetically succeeds next-node string
-                        currentNode = currentNode.getNext();
-                    } else if (node.getString().compareToIgnoreCase(currentNode.getNext().getString()) <= 1 && order == OrderStatus.DESCENDING) {
-                        currentNode = currentNode.getPrev();
-                    } else if (node.getString().compareToIgnoreCase(currentNode.getNext().getString()) < 1 && order == OrderStatus.ASCENDING) {
-                        //Must be lesser alphabetically so insert here
-                        node.setNext(currentNode.getNext());
-                        node.setPrev(currentNode);
-                        currentNode.setNext(node);
-                        node.getNext().setPrev(node);
-                        return;
-                    } else if (node.getString().compareToIgnoreCase(currentNode.getNext().getString()) > 1 && order == OrderStatus.DESCENDING) {
-                        //Must be greater alphabetically so insert here
-                        node.setPrev(currentNode.getPrev());
-                        node.setNext(currentNode);
+                    if (node.getString().compareToIgnoreCase(currentNode.getString()) < 1) {
                         currentNode.setPrev(node);
-                        node.getPrev().setNext(node);
+                        node.setNext(currentNode);
+                        first = node;
                         return;
                     }
-                } catch (NullPointerException e) {
-                    //Must be at the end of the list
-                    switch (order) {
-                        case OrderStatus.ASCENDING:
+
+                    for (int i = 0; i < this.size(); i++) {
+                        try {
+                            if (node.getString().compareToIgnoreCase(currentNode.getNext().getString()) >= 1) {
+                                //CompareTo returns a positive integer if node string alphabetically succeeds next-node string
+                                currentNode = currentNode.getNext();
+                            } else if (node.getString().compareToIgnoreCase(currentNode.getNext().getString()) < 1) {
+                                //Must be lesser alphabetically so insert here
+                                node.setNext(currentNode.getNext());
+                                node.setPrev(currentNode);
+                                currentNode.setNext(node);
+                                node.getNext().setPrev(node);
+                                return;
+                            }
+
+                        } catch (NullPointerException e) {
+                            //Must be at the end of the list
                             currentNode.setNext(node);
                             node.setPrev(currentNode);
                             last = node;
                             return;
+                        }
+                    }
 
-                        case OrderStatus.DESCENDING:
+                    break;
+                case OrderStatus.DESCENDING:
+                    currentNode = last;
+
+                    if (node.getString().compareToIgnoreCase(currentNode.getString()) < 1) {
+                        System.out.println(node.getString() + " is after " + currentNode.getString() + " (last) so added to end");
+                        currentNode.setNext(node);
+                        node.setPrev(currentNode);
+                        last = node;
+                        return;
+                    }
+
+                    for (int i = 0; i < this.size(); i++) {
+                        try {
+                            if (node.getString().compareToIgnoreCase(currentNode.getPrev().getString()) >= 1) {
+                                System.out.println(node.getString() + " is after " + currentNode.getPrev().getString() + " so carry on");
+                                currentNode = currentNode.getPrev();
+                            } else if (node.getString().compareToIgnoreCase(currentNode.getPrev().getString()) < 1) {
+                                System.out.println(node.getString() + " is before " + currentNode.getPrev().getString() + " so inserted here");
+                                currentNode.getPrev().setNext(node);
+                                node.setPrev(currentNode.getPrev());
+                                node.setNext(currentNode);
+                                currentNode.setPrev(node);
+                                return;
+                            }
+                        } catch (NullPointerException e) {
+                            System.out.println("reached end of list, " + node.getString() + " added to start");
                             currentNode.setPrev(node);
                             node.setNext(currentNode);
                             first = node;
                             return;
-                    }
+                        }
 
-                }
+                    }
             }
 
         }
@@ -230,17 +236,18 @@ public class SortedLinkedList implements SortedList {
 
     @Override
     public void print() {
-        Node currentNode = first;
         if (this.size() == 0) {
             System.out.println("List is empty!");
-        } else {
-            for (int i = 0; i < this.size(); i++) {
-                try {
-                    System.out.println("String: " + currentNode.getString());
-                    currentNode = currentNode.getNext();
-                } catch (NullPointerException e) {
-                    System.out.println("End of list so stopped printing");
-                }
+        }
+
+        Node currentNode = first;
+
+        for (int i = 0; i < this.size(); i++) {
+            try {
+                System.out.println("String: " + currentNode.getString());
+                currentNode = currentNode.getNext();
+            } catch (NullPointerException e) {
+                System.out.println("End of list so stopped printing");
             }
         }
     }
