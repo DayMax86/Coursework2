@@ -31,14 +31,6 @@ public class SortedLinkedListTest {
         assert (Objects.equals(L.getFirst().getString(), "alpha"));
     }
 
-    /*
-    @DisplayName("Get using index")
-    @ParameterizedTest
-    @ValueSource(ints = {0, 3, 8, 20, -1}, strings = {"alpha", "charlie", "zulu", "", ""})
-    void getWithIndex(int index, String nodeName) {
-        assertEquals(L.get(index).getString(), nodeName);
-    }
-*/
     @Test
     @DisplayName("Get using index (not paramaterised)")
     void getWithIndex() {
@@ -90,6 +82,33 @@ public class SortedLinkedListTest {
     void removeLastMethod() {
         L.removeLast();
         assertEquals("x-ray", L.last.getString());
+    }
+
+    @ParameterizedTest
+    @DisplayName("Remove element using valid index")
+    @ValueSource(ints = {0, 5, 8})
+    void removeWithValidIndex(int i) {
+        L.remove(i);
+        L.print();
+        assertEquals(8, L.size());
+    }
+
+    @ParameterizedTest
+    @DisplayName("Remove element using invalid index")
+    @ValueSource(ints = {-1, 50})
+    void removeWithInvalidIndex(int i) {
+        L.remove(i);
+        L.print();
+        assertEquals(9, L.size());
+    }
+
+    @ParameterizedTest
+    @DisplayName("Remove element using string")
+    @ValueSource(strings = {"bravo", "zulu", "foxtrot"})
+    void removeWithString(String s) {
+        L.remove(s);
+        L.print();
+        assertEquals(8, L.size());
     }
 
     /*

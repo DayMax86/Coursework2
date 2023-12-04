@@ -239,11 +239,70 @@ public class SortedLinkedList implements SortedList {
 
     @Override
     public boolean remove(int index) {
+        if (index > this.size()) {
+            System.out.println("Index supplied is larger than list!");
+            return false;
+        } else if (index < 0) {
+            System.out.println("Invalid index");
+            return false;
+        } else if (index == this.size() - 1) {
+            this.removeLast();
+        } else if (index == 0) {
+            this.removeFirst();
+        } else {
+            Node currentNode = first;
+            if (this.size() == 0) {
+                System.out.println("List is empty!");
+                return false;
+            } else {
+                for (int i = 0; i < this.size(); i++) {
+                    try {
+                        if (i == index) {
+                            //Remove
+                            currentNode.getNext().setPrev(currentNode.getPrev());
+                            currentNode.getPrev().setNext(currentNode.getNext());
+                            return true;
+                        } else {
+                            currentNode = currentNode.getNext();
+                        }
+                    } catch (NullPointerException e) {
+                        System.out.println("End of list");
+                        return false;
+                    }
+                }
+            }
+        }
         return false;
     }
 
     @Override
     public boolean remove(String string) {
+        Node currentNode = first;
+
+        for (int i = 0; i < this.size(); i++) {
+            try {
+                if (currentNode.getString().equalsIgnoreCase(string)) {
+                    //Remove
+                    if (i == 0) {
+                        //Must be the first element
+                        this.removeFirst();
+                        return true;
+                    } else if (i == this.size() - 1) {
+                        //Must be the last element
+                        this.removeLast();
+                        return true;
+                    }
+                    currentNode.getNext().setPrev(currentNode.getPrev());
+                    currentNode.getPrev().setNext(currentNode.getNext());
+                    return true;
+                } else {
+                    currentNode = currentNode.getNext();
+                }
+            } catch (NullPointerException e) {
+                System.out.println("End of list");
+                return false;
+            }
+        }
         return false;
     }
 
