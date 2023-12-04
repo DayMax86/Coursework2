@@ -215,12 +215,26 @@ public class SortedLinkedList implements SortedList {
 
     @Override
     public boolean removeFirst() {
-        return false;
+        try {
+            first = first.getNext();
+            first.setPrev(null);
+            return true;
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
+        }
     }
 
     @Override
     public boolean removeLast() {
-        return false;
+        try {
+            last = last.getPrev();
+            last.setNext(null);
+            return true;
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
+        }
     }
 
     @Override

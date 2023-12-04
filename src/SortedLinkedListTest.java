@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -61,6 +62,34 @@ public class SortedLinkedListTest {
     void seeIfPresentFalse(String string) {
         L.print();
         assertFalse(L.isPresent(string));
+    }
+
+    @Test
+    @DisplayName("Get first method (ascending)")
+    void getFirstAscending() {
+        L.orderAscending();
+        assertEquals("bravo", L.getFirst().getString());
+    }
+
+    @Test
+    @DisplayName("Get first method (descending)")
+    void getFirstDescending() {
+        L.orderDescending();
+        assertEquals("zulu", L.getFirst().getString());
+    }
+
+    @Test
+    @DisplayName("Remove first element")
+    void removeFirstMethod() {
+        L.removeFirst();
+        assertEquals("charlie", L.first.getString());
+    }
+
+    @Test
+    @DisplayName("Remove last element")
+    void removeLastMethod() {
+        L.removeLast();
+        assertEquals("x-ray", L.last.getString());
     }
 
     /*
