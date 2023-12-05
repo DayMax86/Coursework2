@@ -60,7 +60,7 @@ public class SortedLinkedList implements SortedList {
         int i = 0;
         Node currentNode = first;
         try {
-            while (!currentNode.getString().isEmpty()) {
+            while (!currentNode.getString().isEmpty()) { //TODO() Gets stuck in this loop with alpha and zulu being each other's next...
                 i++;
                 currentNode = currentNode.getNext();
             }
@@ -333,11 +333,11 @@ public class SortedLinkedList implements SortedList {
                 first = node2;
                 return true;
             } else if (node2 == last) {
-                //At the end of the list
+                //At the end of the list //TODO() This isn't working as intended!
                 node1.getPrev().setNext(node2);
-                node1.setPrev(node2);
-                node2.setNext(node1);
                 node2.setPrev(node1.getPrev());
+                node2.setNext(node1);
+                node1.setPrev(node2);
                 last = node1;
                 return true;
             } else {
@@ -365,7 +365,7 @@ public class SortedLinkedList implements SortedList {
             for (int i = 0; i < size; i++) {
                 node1 = this.get(i);
                 node2 = this.get(i + 1);
-                if (bubble(node1, node2)) {
+                if (bubble(node1, node2)) { //TODO() Why are neither of these 'zulu'?
                     //A swap has been done
                     noSwaps = false;
                 }
