@@ -2,42 +2,66 @@
 //----------- For testing ------------
 class Testing {
     public static void main(String[] args) {
-        SortedLinkedList L = new SortedLinkedList();
-        L.order = SortedLinkedList.OrderStatus.ASCENDING;
-        L.add(new Node("bravo"));
-        L.add(new Node("charlie"));
-        L.add(new Node("echo"));
-        L.add(new Node("delta"));
-        L.add(new Node("x-ray"));
-        L.add("charlie");
-        L.add(new Node("golf"));
-        L.add(new Node("alpha"));
-        L.add(new Node("foxtrot"));
-        L.add(new Node("zulu"));
-        L.add(new Node("hotel"));
-        L.add("Max");
-        L.print();
+//        SortedLinkedList L = new SortedLinkedList();
+//        L.order = SortedLinkedList.OrderStatus.ASCENDING;
+//        L.add(new Node("bravo"));
+//        L.add(new Node("charlie"));
+//        L.add(new Node("echo"));
+//        L.add(new Node("delta"));
+//        L.add(new Node("x-ray"));
+//        L.add("charlie");
+//        L.add(new Node("golf"));
+//        L.add(new Node("alpha"));
+//        L.add(new Node("foxtrot"));
+//        L.add(new Node("zulu"));
+//        L.add(new Node("hotel"));
+//        L.add("Max");
+//        L.print();
 
         System.out.println("-----------------------------------");
 
-        SortedLinkedList Lr = new SortedLinkedList();
-        Lr.order = SortedLinkedList.OrderStatus.DESCENDING;
-        Lr.add(new Node("bravo"));
-        Lr.add(new Node("charlie"));
-        Lr.add("Max");
-        Lr.add(new Node("echo"));
-        Lr.add(new Node("delta"));
-        Lr.add(new Node("x-ray"));
-        Lr.add(new Node("golf"));
-        Lr.add(new Node("alpha"));
-        Lr.add("echo");
-        Lr.add(new Node("foxtrot"));
-        Lr.add(new Node("zulu"));
-        Lr.add(new Node("hotel"));
-        Lr.print();
-        System.out.println("----------SORTING BELOW----------------");
-        Lr.orderAscending();
-        Lr.print();
+//        SortedLinkedList Lr = new SortedLinkedList();
+//        Lr.order = SortedLinkedList.OrderStatus.DESCENDING;
+//        Lr.add(new Node("bravo"));
+//        Lr.add(new Node("charlie"));
+//        Lr.add("Max");
+//        Lr.add(new Node("echo"));
+//        Lr.add(new Node("delta"));
+//        Lr.add(new Node("x-ray"));
+//        Lr.add(new Node("golf"));
+//        Lr.add(new Node("alpha"));
+//        Lr.add("echo");
+//        Lr.add(new Node("foxtrot"));
+//        Lr.add(new Node("zulu"));
+//        Lr.add(new Node("hotel"));
+//        Lr.print();
+//        System.out.println("----------SORTING BELOW----------------");
+//        Lr.orderAscending();
+//        Lr.print();
+
+        SortedLinkedList LOoO = new SortedLinkedList();
+        Node node1 = new Node("maxfruit");
+        Node node2 = new Node("raspberry");
+        Node node3 = new Node("cherry");
+        Node node4 = new Node("banana");
+        Node node5 = new Node("satsuma");
+        node1.setPrev(null);
+        node1.setNext(node5);
+        node5.setPrev(node1);
+        node5.setNext(node2);
+        node2.setPrev(node5);
+        node2.setNext(node4);
+        node4.setPrev(node2);
+        node4.setNext(node3);
+        node3.setPrev(node4);
+        node3.setNext(null);
+        LOoO.first = node1;
+        LOoO.last = node3;
+        LOoO.print();
+        LOoO.order = SortedLinkedList.OrderStatus.ASCENDING;
+        System.out.println("_______SORTED BELOW_________");
+        LOoO.orderAscending();
+        LOoO.print();
     }
 }
 
@@ -330,14 +354,16 @@ public class SortedLinkedList implements SortedList {
                 node1.setNext(node2.getNext());
                 node1.setPrev(node2);
                 node2.setNext(node1);
+                node2.setPrev(null);
                 first = node2;
                 return true;
             } else if (node2 == last) {
-                //At the end of the list //TODO() This isn't working as intended!
+                //At the end of the list
                 node1.getPrev().setNext(node2);
                 node2.setPrev(node1.getPrev());
                 node2.setNext(node1);
                 node1.setPrev(node2);
+                node1.setNext(null);
                 last = node1;
                 return true;
             } else {
@@ -345,9 +371,9 @@ public class SortedLinkedList implements SortedList {
                 node1.getPrev().setNext(node2);
                 node2.getNext().setPrev(node1);
                 node1.setNext(node2.getNext());
-                node1.setPrev(node2);
                 node2.setNext(node1);
                 node2.setPrev(node1.getPrev());
+                node1.setPrev(node2);
                 return true;
             }
         }
@@ -361,16 +387,17 @@ public class SortedLinkedList implements SortedList {
         boolean noSwaps = true;
         Node node1;
         Node node2;
-        do  {
-            for (int i = 0; i < size; i++) {
+        do {
+            noSwaps = true;
+            for (int i = 0; i < size - 1; i++) {
                 node1 = this.get(i);
                 node2 = this.get(i + 1);
-                if (bubble(node1, node2)) { //TODO() Why are neither of these 'zulu'?
+                System.out.println("Looking at " + node1.getString() + " and " + node2.getString());
+                if (bubble(node1, node2)) {
                     //A swap has been done
                     noSwaps = false;
                 }
-                System.out.println("i = " + i);
-                System.out.println("noSwaps = " + noSwaps);
+                System.out.println("i = " + i + " || " + "noSwaps = " + noSwaps + " || n1 = " + node1.getString() + ", n2 = " + node2.getString());
             }
         } while (!noSwaps);
     }
