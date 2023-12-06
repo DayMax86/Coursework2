@@ -148,6 +148,36 @@ public class SortedLinkedListTest {
         assertEquals(lAsc.get(0).getString(), L2.get(0).getString());
     }
 
+    @Test
+    @DisplayName("Order list (descending)")
+    void orderDescending() {
+
+        SortedLinkedList lDesc = new SortedLinkedList();
+        lDesc.order = SortedLinkedList.OrderStatus.DESCENDING;
+        lDesc.add("apple");
+        lDesc.add("banana");
+        lDesc.add("lychee");
+        lDesc.add("cherry");
+        lDesc.add("blackcurrant");
+        lDesc.add("persimmon");
+        lDesc.add("yam");
+        lDesc.print();
+
+        SortedLinkedList L2 = new SortedLinkedList();
+        L2.order = SortedLinkedList.OrderStatus.ASCENDING;
+        L2.add("apple");
+        L2.add("banana");
+        L2.add("lychee");
+        L2.add("cherry");
+        L2.add("blackcurrant");
+        L2.add("persimmon");
+        L2.add("yam");
+        L2.orderDescending();
+        L2.print();
+
+        assertEquals(lDesc.get(0).getString(), L2.get(0).getString());
+    }
+
 
     /*
     @Test

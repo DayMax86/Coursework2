@@ -2,20 +2,26 @@
 //----------- For testing ------------
 class Testing {
     public static void main(String[] args) {
-//        SortedLinkedList L = new SortedLinkedList();
-//        L.order = SortedLinkedList.OrderStatus.ASCENDING;
-//        L.add(new Node("bravo"));
-//        L.add(new Node("charlie"));
-//        L.add(new Node("echo"));
-//        L.add(new Node("delta"));
-//        L.add(new Node("x-ray"));
-//        L.add("charlie");
-//        L.add(new Node("golf"));
-//        L.add(new Node("alpha"));
-//        L.add(new Node("foxtrot"));
-//        L.add(new Node("zulu"));
-//        L.add(new Node("hotel"));
-//        L.add("Max");
+        SortedLinkedList L = new SortedLinkedList();
+        L.order = SortedLinkedList.OrderStatus.ASCENDING;
+        L.add(new Node("bravo"));
+        L.add(new Node("charlie"));
+        L.add(new Node("echo"));
+        L.add(new Node("delta"));
+        L.add(new Node("x-ray"));
+        L.add("charlie");
+        L.add(new Node("golf"));
+        L.add(new Node("alpha"));
+        L.add(new Node("foxtrot"));
+        L.add(new Node("zulu"));
+        L.add(new Node("hotel"));
+        L.add("Max");
+        L.print();
+//        System.out.println("_____SORTING BELOW____");
+//        L.orderDescending();
+//        L.print();
+//        System.out.println("DESC ^------------------ ASC...");
+//        L.orderAscending();
 //        L.print();
 
         System.out.println("-----------------------------------");
@@ -39,29 +45,29 @@ class Testing {
 //        Lr.orderAscending();
 //        Lr.print();
 
-        SortedLinkedList LOoO = new SortedLinkedList();
-        Node node1 = new Node("maxfruit");
-        Node node2 = new Node("raspberry");
-        Node node3 = new Node("cherry");
-        Node node4 = new Node("banana");
-        Node node5 = new Node("satsuma");
-        node1.setPrev(null);
-        node1.setNext(node5);
-        node5.setPrev(node1);
-        node5.setNext(node2);
-        node2.setPrev(node5);
-        node2.setNext(node4);
-        node4.setPrev(node2);
-        node4.setNext(node3);
-        node3.setPrev(node4);
-        node3.setNext(null);
-        LOoO.first = node1;
-        LOoO.last = node3;
-        LOoO.print();
-        LOoO.order = SortedLinkedList.OrderStatus.ASCENDING;
-        System.out.println("_______SORTED BELOW_________");
-        LOoO.orderAscending();
-        LOoO.print();
+//        SortedLinkedList LOoO = new SortedLinkedList();
+//        Node node1 = new Node("maxfruit");
+//        Node node2 = new Node("raspberry");
+//        Node node3 = new Node("cherry");
+//        Node node4 = new Node("banana");
+//        Node node5 = new Node("satsuma");
+//        node1.setPrev(null);
+//        node1.setNext(node5);
+//        node5.setPrev(node1);
+//        node5.setNext(node2);
+//        node2.setPrev(node5);
+//        node2.setNext(node4);
+//        node4.setPrev(node2);
+//        node4.setNext(node3);
+//        node3.setPrev(node4);
+//        node3.setNext(null);
+//        LOoO.first = node1;
+//        LOoO.last = node3;
+//        LOoO.print();
+//        LOoO.order = SortedLinkedList.OrderStatus.ASCENDING;
+//        System.out.println("_______SORTED BELOW_________");
+//        LOoO.orderAscending();
+//        LOoO.print();
     }
 }
 
@@ -84,7 +90,7 @@ public class SortedLinkedList implements SortedList {
         int i = 0;
         Node currentNode = first;
         try {
-            while (!currentNode.getString().isEmpty()) { //TODO() Gets stuck in this loop with alpha and zulu being each other's next...
+            while (!currentNode.getString().isEmpty()) {
                 i++;
                 currentNode = currentNode.getNext();
             }
@@ -345,36 +351,72 @@ public class SortedLinkedList implements SortedList {
 
     public boolean bubble(Node node1, Node node2) {
         //If they are already in order, leave them and move on to the next pair
-        if (node1.getString().compareToIgnoreCase(node2.getString()) > 0) {
-            //Must be in the wrong order - swap!
-            System.out.println("Swapping " + node1.getString() + " and " + node2.getString());
-            if (node1 == first) {
-                //At the start of the list
-                node2.getNext().setPrev(node1);
-                node1.setNext(node2.getNext());
-                node1.setPrev(node2);
-                node2.setNext(node1);
-                node2.setPrev(null);
-                first = node2;
-                return true;
-            } else if (node2 == last) {
-                //At the end of the list
-                node1.getPrev().setNext(node2);
-                node2.setPrev(node1.getPrev());
-                node2.setNext(node1);
-                node1.setPrev(node2);
-                node1.setNext(null);
-                last = node1;
-                return true;
-            } else {
-                //In the middle somewhere
-                node1.getPrev().setNext(node2);
-                node2.getNext().setPrev(node1);
-                node1.setNext(node2.getNext());
-                node2.setNext(node1);
-                node2.setPrev(node1.getPrev());
-                node1.setPrev(node2);
-                return true;
+        if (this.order == OrderStatus.ASCENDING) {
+            if (node1.getString().compareToIgnoreCase(node2.getString()) > 0) {
+                //Must be in the wrong order - swap!
+                //System.out.println("Swapping " + node1.getString() + " and " + node2.getString());
+                if (node1 == first) {
+                    //At the start of the list
+                    node2.getNext().setPrev(node1);
+                    node1.setNext(node2.getNext());
+                    node1.setPrev(node2);
+                    node2.setNext(node1);
+                    node2.setPrev(null);
+                    first = node2;
+                    return true;
+                } else if (node2 == last) {
+                    //At the end of the list
+                    node1.getPrev().setNext(node2);
+                    node2.setPrev(node1.getPrev());
+                    node2.setNext(node1);
+                    node1.setPrev(node2);
+                    node1.setNext(null);
+                    last = node1;
+                    return true;
+                } else {
+                    //In the middle somewhere
+                    node1.getPrev().setNext(node2);
+                    node2.getNext().setPrev(node1);
+                    node1.setNext(node2.getNext());
+                    node2.setNext(node1);
+                    node2.setPrev(node1.getPrev());
+                    node1.setPrev(node2);
+                    return true;
+                }
+            }
+        }
+        else if (this.order == OrderStatus.DESCENDING) {
+            if (node2.getString().compareToIgnoreCase(node1.getString()) > 0) {
+                //Must be in the wrong order - swap!
+                //System.out.println("Swapping " + node1.getString() + " and " + node2.getString());
+                if (node1 == first) {
+                    //At the start of the list
+                    node2.getNext().setPrev(node1);
+                    node1.setNext(node2.getNext());
+                    node1.setPrev(node2);
+                    node2.setNext(node1);
+                    node2.setPrev(null);
+                    first = node2;
+                    return true;
+                } else if (node2 == last) {
+                    //At the end of the list
+                    node1.getPrev().setNext(node2);
+                    node2.setPrev(node1.getPrev());
+                    node2.setNext(node1);
+                    node1.setPrev(node2);
+                    node1.setNext(null);
+                    last = node1;
+                    return true;
+                } else {
+                    //In the middle somewhere
+                    node1.getPrev().setNext(node2);
+                    node2.getNext().setPrev(node1);
+                    node1.setNext(node2.getNext());
+                    node2.setNext(node1);
+                    node2.setPrev(node1.getPrev());
+                    node1.setPrev(node2);
+                    return true;
+                }
             }
         }
         return false;
@@ -382,6 +424,17 @@ public class SortedLinkedList implements SortedList {
 
     @Override
     public void orderAscending() {
+        this.order = OrderStatus.ASCENDING;
+        this.orderList();
+    }
+
+    @Override
+    public void orderDescending() {
+        this.order = OrderStatus.DESCENDING;
+        this.orderList();
+    }
+
+    public void orderList() {
         //Bubble sort the list
         int size = this.size();
         boolean noSwaps = true;
@@ -392,19 +445,12 @@ public class SortedLinkedList implements SortedList {
             for (int i = 0; i < size - 1; i++) {
                 node1 = this.get(i);
                 node2 = this.get(i + 1);
-                System.out.println("Looking at " + node1.getString() + " and " + node2.getString());
                 if (bubble(node1, node2)) {
                     //A swap has been done
                     noSwaps = false;
                 }
-                System.out.println("i = " + i + " || " + "noSwaps = " + noSwaps + " || n1 = " + node1.getString() + ", n2 = " + node2.getString());
             }
         } while (!noSwaps);
-    }
-
-    @Override
-    public void orderDescending() {
-
     }
 
     @Override
