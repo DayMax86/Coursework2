@@ -40,19 +40,18 @@ public class CustomSort implements SortingInterface {
 
     @Override
     public ArrayList<Integer> getGaps() {
-
-
-        return null;
+        return calculateGaps(myValues);
     }
 
     @Override
     public void add(Double value) {
-
+        myValues.add(value);
+        sort();
     }
 
     @Override
     public void remove(int index) {
-
+        myValues.remove(index);
     }
 
     @Override
