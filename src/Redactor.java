@@ -1,4 +1,3 @@
-import java.util.Arrays;
 
 public class Redactor {
     /*
@@ -28,22 +27,39 @@ Capitalization of unredacted words in the input text should be maintained in the
     * */
 
     public static String redact(String content, String[] redactWords) {
-        //Do a check for - and ' in the redactWords array
-        System.out.println("content: " + content);
-        System.out.println("redactWords: " + Arrays.toString(redactWords));
-        if (!content.matches("[-']*")) {
-            //String redactedString = content;
-            System.out.println("content contains no - or '");
-            for (String word : redactWords) {
-                //Use regex and String.matches() method
-                if (content.matches(("(?i)^" + word + "$|(?i) *" + word + " *"))) {
-                    return "true";
-                } else {
-                    System.out.println("No match from regex");
+        //Turn the content string into a string array
+        String[] splitContent = content.split("");
+        String tempString = "";
+        StringBuilder output = new StringBuilder();
+        //Iterate over the char list checking for valid characters
+        for (String s : splitContent) {
+            if (String.valueOf(s).matches("^[a-zA-Z0-9]+$")) {
+                //The character is alphanumeric
+                tempString += s;
+            } else { //Must be non-alphanumeric
+                for (String word : redactWords) {
+                    if (tempString.equalsIgnoreCase(word)) {
+                        //This set of characters appears in the redact words list
+                        output.append("*".repeat(tempString.length()));
+                        tempString = "";
+                        break;
+                    }
                 }
+                output.append(tempString).append(s);
+                tempString = "";
             }
         }
-        return "false";
+        //Check the last value of tempString
+        for (String word : redactWords) {
+            if (tempString.equalsIgnoreCase(word)) {
+                //This set of characters appears in the redact words list
+                output.append("*".repeat(tempString.length()));
+                tempString = "";
+            }
+        }
+        output.append(tempString);
+        return output.toString();
     }
+
 
 }
