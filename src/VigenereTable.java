@@ -2,17 +2,27 @@ import java.util.Arrays;
 
 public class VigenereTable {
     //Generate a 2D array with all the Vigenere table values
-    final String[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    public String[] getAlphabet() {
+        return "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    }
     String[][] table = new String[26][26];
 
-//    public VigenereTable() {
-//        populateTable();
-//    }
+    public VigenereTable() {
+        populateTable();
+    }
+
+    public String lookup(String columnLetter, String rowLetter) {
+        int x = 0, y = 0;
+        x = Arrays.toString(getAlphabet()).indexOf(columnLetter);
+        y = Arrays.toString(getAlphabet()).indexOf(rowLetter);
+        return table[x][y];
+    }
+
     public void populateTable() {
         for (int x = 0; x < 26; x++) {
             for (int y = 0; y < 26; y++) {
-                table[x][y] = shift(alphabet,x)[y];
-                System.out.println("Table [" + x + "][" + y + "] = " + table[x][y]);
+                table[x][y] = shift(getAlphabet(),x)[y];
+                //System.out.println("Table [" + x + "][" + y + "] = " + table[x][y]);
             }
         }
     }
@@ -22,14 +32,11 @@ public class VigenereTable {
             for (int i = 0; i < ab.length; i++) {
                 String next = "-";
                 if (i + amount >= 26) {
-                    next = alphabet[i + amount - 26];
+                    next = getAlphabet()[i + amount - 26];
                 } else {
-                    next = alphabet[i + amount];
+                    next = getAlphabet()[i + amount];
                 }
                 ab[i] = next;
-            }
-            for (int k = 0; k < 26; k++) {
-                System.out.println("Letter #" + k + " = " + ab[k]);
             }
             return ab;
         } else {
