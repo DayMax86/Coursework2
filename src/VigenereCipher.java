@@ -20,7 +20,7 @@ public class VigenereCipher implements Cipher {
         StringBuilder encryptedMessage = new StringBuilder();
 
         String[] messageArray = message.split("");
-        String[] keyedMessageArray = getKeyedMessage(message,keyword).split("");
+        String[] keyedMessageArray = getKeyedMessage(message, keyword).split("");
 
         int i;
         for (i = 0; i < messageArray.length; i++) {
@@ -38,13 +38,13 @@ public class VigenereCipher implements Cipher {
 
     @Override
     public String encrypt(String message_filename, String key_filename) {
-        String message = readFile(message_filename).toString(); //TODO() 'data' returns an array so toString method returns brackets.
+        String message = readFile(message_filename).toString();
         String keyword = readFile(key_filename).toString();
 
         StringBuilder encryptedMessage = new StringBuilder();
 
         String[] messageArray = message.split("");
-        String[] keyedMessageArray = getKeyedMessage(message,keyword).split("");
+        String[] keyedMessageArray = getKeyedMessage(message, keyword).split("");
 
         int i;
         for (i = 0; i < messageArray.length; i++) {
@@ -82,7 +82,7 @@ public class VigenereCipher implements Cipher {
         return null;
     }
 
-    public static ArrayList<String> readFile(String filename) {
+    public static String readFile(String filename) {
         ArrayList<String> data = new ArrayList<>();
         try {
             File f = new File(filename);
@@ -94,7 +94,9 @@ public class VigenereCipher implements Cipher {
         } catch (FileNotFoundException e) {
             System.out.println("No such file found");
         }
-        return data;
+        String strData = data.toString();
+        strData = strData.substring(1, strData.length() - 1);
+        return strData;
     }
 
     /*

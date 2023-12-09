@@ -13,8 +13,8 @@ public class VigenereTable {
 
     public String lookup(String columnLetter, String rowLetter) {
         int x = 0, y = 0;
-        x = Arrays.toString(getAlphabet()).indexOf(columnLetter);
-        y = Arrays.toString(getAlphabet()).indexOf(rowLetter);
+        x = Arrays.stream(getAlphabet()).toList().indexOf(columnLetter.toUpperCase());
+        y = Arrays.stream(getAlphabet()).toList().indexOf(rowLetter.toUpperCase());
         return table[x][y];
     }
 
@@ -30,7 +30,7 @@ public class VigenereTable {
     public String[] shift(String[] ab, int amount) {
         if (!(amount > 26)) {
             for (int i = 0; i < ab.length; i++) {
-                String next = "-";
+                String next;
                 if (i + amount >= 26) {
                     next = getAlphabet()[i + amount - 26];
                 } else {

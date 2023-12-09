@@ -23,7 +23,7 @@ public class VigenereCipherTest {
     @Test
     @DisplayName("Read file contents")
     void readFileContents() {
-        ArrayList<String> data = VigenereCipher.readFile("res/encrypt_text.txt");
+        String data = VigenereCipher.readFile("res/encrypt_text.txt");
         System.out.println(data);
     }
 
