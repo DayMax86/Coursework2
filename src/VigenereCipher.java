@@ -22,8 +22,10 @@ public class VigenereCipher implements Cipher {
         String[] messageArray = message.split("");
         String[] keyedMessageArray = getKeyedMessage(message, keyword).split("");
 
+        System.out.println("Length of messageArray = " + messageArray.length + " | Length of keyedMessageArray = " + keyedMessageArray.length);
         int i;
         for (i = 0; i < messageArray.length; i++) {
+            System.out.println("messageArray[i] = " + messageArray[i] + " | keyedMessageArray[i] = " + keyedMessageArray[i]);
             if (String.valueOf(messageArray[i]).matches("^[a-zA-Z]+$")) {
                 encryptedMessage.append(table.lookup(messageArray[i], keyedMessageArray[i]));
             } else {
@@ -61,24 +63,37 @@ public class VigenereCipher implements Cipher {
     public static String getKeyedMessage(String message, String keyword) {
         String keyedMessage = "";
         int i = 0;
+
         for (String c : message.split("")) {
-            if (String.valueOf(c).matches("^[a-zA-Z]+$")) {
-                //Character is a letter
-                keyedMessage += keyword.charAt(i); //Can String receive char? //TODO()
-                i++;
-            } else {
-                //Mustn't be a letter
-                keyedMessage += c;
-            }
+            keyedMessage += keyword.charAt(i);
+            i++;
             if (i >= keyword.length()) {
                 i = 0;
             }
         }
+        System.out.println(keyedMessage);
         return keyedMessage;
+
+        //  THE BELOW LOGIC ALLOWS FOR SPACES AND PUNCTUATION IN THE SAME WAY ALL OTHER IMPLEMENTATIONS OF THE CIPHER DO
+//        for (String c : message.split("")) {
+//            if (String.valueOf(c).matches("^[a-zA-Z.!?'-]+$")) {
+//                //Character is a letter
+//                keyedMessage += keyword.charAt(i);
+//                i++;
+//            } else {
+//                //Mustn't be a letter
+//                keyedMessage += c;
+//            }
+//            if (i >= keyword.length()) {
+//                i = 0;
+//            }
+//        }
+
     }
 
     @Override
     public String decrypt(String message_filename, String key_filename) {
+        //TODO()
         return null;
     }
 
@@ -94,18 +109,23 @@ public class VigenereCipher implements Cipher {
         } catch (FileNotFoundException e) {
             System.out.println("No such file found");
         }
-        String strData = data.toString();
-        strData = strData.substring(1, strData.length() - 1);
+        //String strData = data.toString();
+        String strData = "";
+        for (String line : data) {
+            for (int i = 0; i < line.length(); i++) {
+                String c = line.split("")[i];
+                strData += c;
+            }
+            strData += System.lineSeparator();
+        }
+
+        if (strData.endsWith("\r\n")) {
+            strData = strData.substring(0, strData.length() - 2);
+        } else if ( strData.endsWith("\n")) {
+            strData = strData.substring(0, strData.length() - 1);
+        }
         return strData;
     }
-
-    /*
-- You should use the Vigenère square above to encrypt and decrypt the messages using a given key (both retrieved from a file).
-- Encrypted messages should be in capital letters to obfuscate the message from anyone intercepting them
-- Decrypted messages should also be in capital letters
-- If the character is a letter of the alphabet it should be encrypted based on the above
-- If the character is not in the alphabet then it should remain unchanged
-     */
 
 }
 
