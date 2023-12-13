@@ -11,6 +11,18 @@ public class VigenereTable {
         populateTable();
     }
 
+    public String decryptLookup(String rowLetter, String keyedLetter) {
+        int x = 0, y = 0;
+        String columnLetter = "";
+        y = Arrays.stream(getAlphabet()).toList().indexOf(rowLetter.toUpperCase());
+        for (x = 0; x < getAlphabet().length; x++) {
+            if (table[x][y].equalsIgnoreCase(keyedLetter)) {
+                columnLetter = getAlphabet()[x];
+            }
+        }
+        return columnLetter;
+    }
+
     public String lookup(String columnLetter, String rowLetter) {
         int x = 0, y = 0;
         x = Arrays.stream(getAlphabet()).toList().indexOf(columnLetter.toUpperCase());

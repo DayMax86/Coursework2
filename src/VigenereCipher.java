@@ -7,41 +7,10 @@ public class VigenereCipher implements Cipher {
 
     VigenereTable table = new VigenereTable();
 
-    //FOR TESTING -------------- TODO()
-    public static void main(String[] args) {
-
-    }
-
-    public static String myEncrypt(String message_filename, String key_filename) {
-        VigenereTable table = new VigenereTable();
-        String message = readFile(message_filename).toString();
-        String keyword = readFile(key_filename).toString();
-
-        StringBuilder encryptedMessage = new StringBuilder();
-
-        String[] messageArray = message.split("");
-        String[] keyedMessageArray = getKeyedMessage(message, keyword).split("");
-
-        System.out.println("Length of messageArray = " + messageArray.length + " | Length of keyedMessageArray = " + keyedMessageArray.length);
-        int i;
-        for (i = 0; i < messageArray.length; i++) {
-            System.out.println("messageArray[i] = " + messageArray[i] + " | keyedMessageArray[i] = " + keyedMessageArray[i]);
-            if (String.valueOf(messageArray[i]).matches("^[a-zA-Z]+$")) {
-                encryptedMessage.append(table.lookup(messageArray[i], keyedMessageArray[i]));
-            } else {
-                encryptedMessage.append(messageArray[i]);
-            }
-        }
-
-        return encryptedMessage.toString();
-    }
-
-    //---------------------------------
-
     @Override
     public String encrypt(String message_filename, String key_filename) {
-        String message = readFile(message_filename).toString();
-        String keyword = readFile(key_filename).toString();
+        String message = readFile(message_filename);
+        String keyword = readFile(key_filename);
 
         StringBuilder encryptedMessage = new StringBuilder();
 
@@ -58,6 +27,27 @@ public class VigenereCipher implements Cipher {
         }
 
         return encryptedMessage.toString();
+    }
+
+    @Override
+    public String decrypt(String message_filename, String key_filename) {
+        String message = readFile(message_filename);
+        String keyword = readFile(key_filename);
+
+        StringBuilder decryptedMessage = new StringBuilder();
+
+        String[] messageArray = message.split("");
+        String[] keyedMessageArray = getKeyedMessage(message, keyword).split("");
+
+        int i;
+        for (i = 0; i < messageArray.length; i++) {
+            if (String.valueOf(messageArray[i]).matches("^[a-zA-Z]+$")) {
+                decryptedMessage.append(table.decryptLookup(keyedMessageArray[i], messageArray[i]));
+            } else {
+                decryptedMessage.append(messageArray[i]);
+            }
+        }
+        return decryptedMessage.toString();
     }
 
     public static String getKeyedMessage(String message, String keyword) {
@@ -74,7 +64,7 @@ public class VigenereCipher implements Cipher {
         System.out.println(keyedMessage);
         return keyedMessage;
 
-        //  THE BELOW LOGIC ALLOWS FOR SPACES AND PUNCTUATION IN THE SAME WAY ALL OTHER IMPLEMENTATIONS OF THE CIPHER DO
+        //THE BELOW LOGIC ALLOWS FOR SPACES AND PUNCTUATION IN THE SAME WAY ALL OTHER IMPLEMENTATIONS OF THE CIPHER DO
 //        for (String c : message.split("")) {
 //            if (String.valueOf(c).matches("^[a-zA-Z.!?'-]+$")) {
 //                //Character is a letter
@@ -91,11 +81,7 @@ public class VigenereCipher implements Cipher {
 
     }
 
-    @Override
-    public String decrypt(String message_filename, String key_filename) {
-        //TODO()
-        return null;
-    }
+
 
     public static String readFile(String filename) {
         ArrayList<String> data = new ArrayList<>();
@@ -109,7 +95,6 @@ public class VigenereCipher implements Cipher {
         } catch (FileNotFoundException e) {
             System.out.println("No such file found");
         }
-        //String strData = data.toString();
         String strData = "";
         for (String line : data) {
             for (int i = 0; i < line.length(); i++) {
@@ -124,7 +109,7 @@ public class VigenereCipher implements Cipher {
         } else if ( strData.endsWith("\n")) {
             strData = strData.substring(0, strData.length() - 1);
         }
-        return strData;
+        return strData; //This method returns a different value on Windows!! (CRLF vs LF)
     }
 
 }

@@ -2,6 +2,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+
 import java.util.Arrays;
 import java.util.ArrayList;
 
@@ -47,6 +48,18 @@ public class VigenereCipherTest {
         VigenereCipher.myEncrypt(
                 "res/encrypt_text.txt",
                 "res/key_check.txt")
+        );
+        //assertEquals("LXFOPVEFRNHR", VigenereCipher.myEncrypt("res/attack_at_dawn.txt", "res/lemon.txt"));
+    }
+
+    @Test
+    @DisplayName("Decrypt successfully")
+    void decryptMessage() {
+        assertEquals( "Don't forget to test your code!\n".toUpperCase() +
+                        "Otherwise you will be very disappointed.".toUpperCase(),
+                VigenereCipher.myDecrypt(
+                        "res/decrypt_text.txt",
+                        "res/key_check.txt").toUpperCase()
         );
     }
 
