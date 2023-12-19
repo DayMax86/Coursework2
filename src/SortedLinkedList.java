@@ -1,79 +1,4 @@
 
-//----------- For testing ------------
-class Testing {
-    public static void main(String[] args) {
-        SortedLinkedList L = new SortedLinkedList();
-        L.order = SortedLinkedList.OrderStatus.ASCENDING;
-        L.add(new Node("bravo"));
-        L.add(new Node("charlie"));
-        L.add(new Node("echo"));
-        L.add(new Node("delta"));
-        L.add(new Node("x-ray"));
-        L.add("charlie");
-        L.add(new Node("golf"));
-        L.add(new Node("alpha"));
-        L.add(new Node("foxtrot"));
-        L.add(new Node("zulu"));
-        L.add(new Node("hotel"));
-        L.add("Max");
-        L.print();
-//        System.out.println("_____SORTING BELOW____");
-//        L.orderDescending();
-//        L.print();
-//        System.out.println("DESC ^------------------ ASC...");
-//        L.orderAscending();
-//        L.print();
-
-        System.out.println("-----------------------------------");
-
-//        SortedLinkedList Lr = new SortedLinkedList();
-//        Lr.order = SortedLinkedList.OrderStatus.DESCENDING;
-//        Lr.add(new Node("bravo"));
-//        Lr.add(new Node("charlie"));
-//        Lr.add("Max");
-//        Lr.add(new Node("echo"));
-//        Lr.add(new Node("delta"));
-//        Lr.add(new Node("x-ray"));
-//        Lr.add(new Node("golf"));
-//        Lr.add(new Node("alpha"));
-//        Lr.add("echo");
-//        Lr.add(new Node("foxtrot"));
-//        Lr.add(new Node("zulu"));
-//        Lr.add(new Node("hotel"));
-//        Lr.print();
-//        System.out.println("----------SORTING BELOW----------------");
-//        Lr.orderAscending();
-//        Lr.print();
-
-//        SortedLinkedList LOoO = new SortedLinkedList();
-//        Node node1 = new Node("maxfruit");
-//        Node node2 = new Node("raspberry");
-//        Node node3 = new Node("cherry");
-//        Node node4 = new Node("banana");
-//        Node node5 = new Node("satsuma");
-//        node1.setPrev(null);
-//        node1.setNext(node5);
-//        node5.setPrev(node1);
-//        node5.setNext(node2);
-//        node2.setPrev(node5);
-//        node2.setNext(node4);
-//        node4.setPrev(node2);
-//        node4.setNext(node3);
-//        node3.setPrev(node4);
-//        node3.setNext(null);
-//        LOoO.first = node1;
-//        LOoO.last = node3;
-//        LOoO.print();
-//        LOoO.order = SortedLinkedList.OrderStatus.ASCENDING;
-//        System.out.println("_______SORTED BELOW_________");
-//        LOoO.orderAscending();
-//        LOoO.print();
-    }
-}
-
-//------------------------------------
-
-
 public class SortedLinkedList implements SortedList {
 
     Node first = new Node(null, "", null);
@@ -95,7 +20,7 @@ public class SortedLinkedList implements SortedList {
                 currentNode = currentNode.getNext();
             }
         } catch (NullPointerException e) {
-            //System.out.println("End of list reached | " + i);
+            System.out.println("End of list reached | " + i);
         }
         return i;
     }
@@ -117,7 +42,7 @@ public class SortedLinkedList implements SortedList {
 
         if (this.size() == 0) {
             //There is no first item so new node becomes the first (for both ascending and descending)
-//            System.out.println("No first node so new node (" + node.getString() + ") = first and last");
+            System.out.println("No first node so new node (" + node.getString() + ") = first and last");
             first = node;
             last = node;
         } else {
@@ -161,7 +86,7 @@ public class SortedLinkedList implements SortedList {
                     currentNode = last;
 
                     if (node.getString().compareToIgnoreCase(currentNode.getString()) < 1) {
-//                        System.out.println(node.getString() + " is after " + currentNode.getString() + " (last) so added to end");
+                        System.out.println(node.getString() + " is after " + currentNode.getString() + " (last) so added to end");
                         currentNode.setNext(node);
                         node.setPrev(currentNode);
                         last = node;
@@ -171,10 +96,10 @@ public class SortedLinkedList implements SortedList {
                     for (int i = 0; i < this.size(); i++) {
                         try {
                             if (node.getString().compareToIgnoreCase(currentNode.getPrev().getString()) >= 1) {
-//                                System.out.println(node.getString() + " is after " + currentNode.getPrev().getString() + " so carry on");
+                                System.out.println(node.getString() + " is after " + currentNode.getPrev().getString() + " so carry on");
                                 currentNode = currentNode.getPrev();
                             } else if (node.getString().compareToIgnoreCase(currentNode.getPrev().getString()) < 1) {
-//                                System.out.println(node.getString() + " is before " + currentNode.getPrev().getString() + " so inserted here");
+                                System.out.println(node.getString() + " is before " + currentNode.getPrev().getString() + " so inserted here");
                                 currentNode.getPrev().setNext(node);
                                 node.setPrev(currentNode.getPrev());
                                 node.setNext(currentNode);
@@ -182,7 +107,7 @@ public class SortedLinkedList implements SortedList {
                                 return;
                             }
                         } catch (NullPointerException e) {
-//                            System.out.println("reached end of list, " + node.getString() + " added to start");
+                            System.out.println("reached end of list, " + node.getString() + " added to start");
                             currentNode.setPrev(node);
                             node.setNext(currentNode);
                             first = node;
@@ -354,7 +279,6 @@ public class SortedLinkedList implements SortedList {
         if (this.order == OrderStatus.ASCENDING) {
             if (node1.getString().compareToIgnoreCase(node2.getString()) > 0) {
                 //Must be in the wrong order - swap!
-                //System.out.println("Swapping " + node1.getString() + " and " + node2.getString());
                 if (node1 == first) {
                     //At the start of the list
                     node2.getNext().setPrev(node1);
@@ -388,7 +312,6 @@ public class SortedLinkedList implements SortedList {
         else if (this.order == OrderStatus.DESCENDING) {
             if (node2.getString().compareToIgnoreCase(node1.getString()) > 0) {
                 //Must be in the wrong order - swap!
-                //System.out.println("Swapping " + node1.getString() + " and " + node2.getString());
                 if (node1 == first) {
                     //At the start of the list
                     node2.getNext().setPrev(node1);
